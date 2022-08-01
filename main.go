@@ -18,7 +18,7 @@ func main() {
 	)
 
 	defer db.Close()
-	localQueue, err := local_rabbit.InitQueue("amqp://guest@localhost:5672/", "TestQueue")
+	localQueue, err := local_rabbit.InitQueue("amqp://guest:guest@localhost:5672/", "TestQueue")
 	if err != nil {
 		log.Fatal("Fail to create queue: ", err)
 	}

@@ -1,4 +1,7 @@
 version: "3.9"
+networks:
+  rabbitmq_go_net:
+    driver: bridge
 services:
   postgres:
     image: postgres:13.3
@@ -16,10 +19,19 @@ services:
       - 5672:5672
       - 15672:15672
     volumes:
-      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      - ./rabbit-mq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
     networks:
       - rabbitmq_go_net
-networks:
-  rabbitmq_go_net:
-    driver: bridge
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8001:8001
+    volumes:
+      - .:/app
+    restart: always
+    networks:
+      - rabbitmq_go_net
+    depends_on:
+      - "rabbitmq"
