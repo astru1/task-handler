@@ -10,7 +10,7 @@ import (
 
 func main() {
 	db, _ := database.CreateDBConnection(
-		"localhost",
+		"postgres",
 		"5400",
 		"misha",
 		"12345",
@@ -18,7 +18,7 @@ func main() {
 	)
 
 	defer db.Close()
-	localQueue, err := local_rabbit.InitQueue("amqp://guest:guest@localhost:5672/", "TestQueue")
+	localQueue, err := local_rabbit.InitQueue("amqp://guest:guest@rabbitmq:5672/", "TestQueue")
 	if err != nil {
 		log.Fatal("Fail to create queue: ", err)
 	}

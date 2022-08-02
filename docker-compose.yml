@@ -12,6 +12,8 @@ services:
       POSTGRES_PASSWORD: "12345"
     ports:
       - "5400:5432"
+    networks:
+      - rabbitmq_go_net
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: 'rabbitmq'
