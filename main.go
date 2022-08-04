@@ -9,21 +9,25 @@ import (
 )
 
 func main() {
-	db, _ := database.CreateDBConnection(
+	db, err := database.CreateDBConnection(
 		"postgres",
-		"5400",
+		"5432",
 		"misha",
 		"12345",
 		"test",
 	)
 
+	if err != nil {
+		log.Fatal("Failed to connect to database: ", err)
+	}
+
 	defer db.Close()
 	localQueue, err := local_rabbit.InitQueue("amqp://guest:guest@rabbitmq:5672/", "TestQueue")
 	if err != nil {
-		log.Fatal("Fail to create queue: ", err)
+		log.Fatal("Failed to create queue: ", err)
 	}
 	if err := database.CreateTable(db); err != nil {
-		log.Println("Fail to create tasks table: ", err)
+		log.Println("Failed to create tasks table: ", err)
 	}
 	hi := handlers.InitHandlers(localQueue, db)
 

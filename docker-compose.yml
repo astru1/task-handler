@@ -1,7 +1,7 @@
 version: "3.9"
-networks:
-  rabbitmq_go_net:
-    driver: bridge
+#networks:
+#  rabbitmq_go_net:
+#    driver: bridge
 services:
   postgres:
     image: postgres:13.3
@@ -11,29 +11,29 @@ services:
       POSTGRES_USER: "misha"
       POSTGRES_PASSWORD: "12345"
     ports:
-      - "5400:5432"
-    networks:
-      - rabbitmq_go_net
+      - "5432:5432"
+#    networks:
+#      - rabbitmq_go_net
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: 'rabbitmq'
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - ./rabbit-mq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
-    networks:
-      - rabbitmq_go_net
+#    networks:
+#      - rabbitmq_go_net
   app:
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - 8001:8001
+      - "8001:8001"
     volumes:
       - .:/app
     restart: always
-    networks:
-      - rabbitmq_go_net
+#    networks:
+#      - rabbitmq_go_net
     depends_on:
       - "rabbitmq"
